@@ -27,7 +27,7 @@ const client = new Client({
 /* WEBSERVER STUFF FOR THE WEBCMA HOSTING SINCE BOTS CANT STREAM OR TURN ON WEBCAM STUFF */
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 let clients = [];
 
 
