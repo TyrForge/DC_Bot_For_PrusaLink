@@ -13,6 +13,7 @@ import {
 } from 'discord.js';
 import { getJobStatus, cancel_job } from './job_status.js';
 import { getPrinterStatus } from './printer_status.js';
+import { formatduration } from './time_calc.js';
 
 const PREFIX = '!';
 const client = new Client({
@@ -112,6 +113,11 @@ client.on(Events.MessageCreate, async (message) => {
                 .setLabel('Printer Status')
                 .setStyle(ButtonStyle.Primary),
 
+                new ButtonBuilder()
+                .setCustomId('job_status')
+                .setLabel('Job Status')
+                .setStyle(ButtonStyle.Primary),
+
             new ButtonBuilder()
                 .setCustomId('cancel_job')
                 .setLabel('Cancel Current Job')
@@ -126,7 +132,7 @@ client.on(Events.MessageCreate, async (message) => {
     }
 });
 
-/* Early button command test */
+
 
 client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isButton()) return;
@@ -148,8 +154,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 Current Printer status: ${printer_status.printer.state} 
                 Current Printer Bed temp: ${printer_status.printer.temp_bed} 
                 Current Printer Nozzle temp: ${printer_status.printer.temp_nozzle}
-                Current Job Status: ${job_status.file.name}
-                Current progress/time remaining: ${job_status.progress}/${job_status.time_printing}
                 `,
                 ephemeral: true,
             });
@@ -173,7 +177,22 @@ client.on(Events.InteractionCreate, async (interaction) => {
             ephemeral: true,
         });
     }
-  
+
+    if (interaction.customId === 'job_status') {   
+        const job_status = await getJobStatus(5000)
+        const remining = formatduration(job_status.time_remaining)
+
+        await interaction.reply({
+            content: `
+            Current Job Status: ${job_status.file.name}
+            Current progress: ${job_status.progress}%
+            Current Time Remaining: ${remining}
+            `,
+            ephemeral: true,
+        });
+    }
+
+
 });
 
 client.login(process.env.TOKEN);

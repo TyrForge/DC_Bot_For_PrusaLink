@@ -1,0 +1,19 @@
+{
+  id: 170,
+  state: 'PRINTING',
+  progress: 0,
+  time_remaining: 13440,
+  time_printing: 987,
+  file: {
+    refs: {
+      icon: '/thumb/s/usb/DUCK-B~1.BGC',
+      thumbnail: '/thumb/l/usb/DUCK-B~1.BGC',
+      download: '/usb/DUCK-B~1.BGC'
+    },
+    name: 'DUCK-B~1.BGC',
+    display_name: 'duck-bill-flexi-body-3300-v3_0.4n_0.2mm_PETG_XLIS_3h46m.bgcode',
+    path: '/usb',
+    size: 0,
+    m_timestamp: 1765282203
+  }
+}
