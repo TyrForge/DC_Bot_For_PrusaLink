@@ -11,6 +11,7 @@ import {
 } from 'discord.js';
 import express from 'express';
 import { spawn } from 'child_process';
+import { getPrinterStatus } from 'printer_status'
 
 const PREFIX = '!';
 const client = new Client({
@@ -24,7 +25,7 @@ const client = new Client({
 
 
 
-/* WEBSERVER STUFF FOR THE WEBCMA HOSTING SINCE BOTS CANT STREAM OR TURN ON WEBCAM STUFF */
+/* WEBSERVER STUFF FOR THE WEBCAM HOSTING SINCE BOTS CANT STREAM OR TURN ON WEBCAM STUFF */
 
 const app = express();
 const PORT = 8080;
@@ -95,19 +96,26 @@ client.on(Events.MessageCreate, async (message) => {
         return message.reply(`Current Ping is: ${client.ws.ping}ms`);
     }
 
-    if (command === 'camera') {
-        return message.reply("http://localhost:3000/");
-    }
-
   /* Early button test */
 
     if (command === 'buttons') {
         const row = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
-                .setCustomId('current_print_button')
-                .setLabel('Current Print')
+                .setCustomId('camera')
+                .setLabel('Live Camera')
                 .setStyle(ButtonStyle.Primary),
+
+            new ButtonBuilder()
+                .setCustomId('printer_status')
+                .setLabel('Printer Status')
+                .setStyle(ButtonStyle.Primary),
+
+            new ButtonBuilder()
+                .setCustomId('cancel_job')
+                .setLabel('Cancel Current Job')
+                .setStyle(ButtonStyle.Danger),
         );
+        
 
         return message.channel.send({
         content: 'Commands:',
@@ -121,9 +129,25 @@ client.on(Events.MessageCreate, async (message) => {
 client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isButton()) return;
 
-    if (interaction.customId === 'current_print_button') {
+    if (interaction.customId === 'camera') {
         await interaction.reply({
-            content: `Hello ${interaction.user.username}!`,
+            content: `http://localhost:8080/`,
+            ephemeral: true,
+        });
+    }
+
+    if (interaction.customId === 'printer_status') {
+        const printer_status = await getPrinterStatus();
+
+        await interaction.reply({
+            content: `Current Printer status ${printer_status.printer.state}`,
+            ephemeral: true,
+        });
+    }
+
+    if (interaction.customId === 'cancel_job') {
+        await interaction.reply({
+            content: `Job cancelled`,
             ephemeral: true,
         });
     }
