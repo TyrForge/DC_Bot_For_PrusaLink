@@ -11,7 +11,7 @@ import {
 } from 'discord.js';
 import express from 'express';
 import { spawn } from 'child_process';
-import { getPrinterStatus } from 'printer_status'
+import { getPrinterStatus } from './printer_status.js';
 
 const PREFIX = '!';
 const client = new Client({
@@ -134,15 +134,24 @@ client.on(Events.InteractionCreate, async (interaction) => {
             content: `http://localhost:8080/`,
             ephemeral: true,
         });
-    }
+    } 
 
     if (interaction.customId === 'printer_status') {
-        const printer_status = await getPrinterStatus();
+        try {
+            const printer_status = await getPrinterStatus(5000);
 
-        await interaction.reply({
-            content: `Current Printer status ${printer_status.printer.state}`,
-            ephemeral: true,
-        });
+            await interaction.reply({
+                content: `Current Printer status ${printer_status.printer.state}`,
+                ephemeral: true,
+            });
+        } catch (err) {
+            await interaction.reply({
+                content: "Printer Unreachable",
+                ephemeral: true
+            });
+            console.error("Printer Status Error:", err.message)
+        }
+
     }
 
     if (interaction.customId === 'cancel_job') {
