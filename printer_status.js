@@ -28,6 +28,3 @@ export async function getPrinterStatus(timeoutMs = 5000) {
         clearTimeout(timeout);
     }
 }
-
-const stuff = await getPrinterStatus(4000)
-console.log(stuff)

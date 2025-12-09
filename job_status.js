@@ -77,6 +77,3 @@ export async function cancel_job(timeoutMs = 5000, job_id) {
     }
 
 }
-
-const job = await getJobStatus(5000)
-console.log(job)
