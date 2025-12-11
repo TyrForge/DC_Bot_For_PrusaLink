@@ -23,7 +23,7 @@ start_webapp()
 client.once("ready", async () => {
     console.log(`Logged in as ${client.user.tag}`);
 
-    const channelId = "1447983291616591892";
+    const channelId = DEFAULT_CHANNEL;
     const channel = await client.channels.fetch(channelId);
 
     if (!channel || !channel.isTextBased()) {
