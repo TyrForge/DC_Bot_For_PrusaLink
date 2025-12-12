@@ -2,6 +2,6 @@
 Basic Discord bot to get info from PrusaLink devices
 
 ## REQUIREMENTS
-* FFmpeg
+* FFmpeg (Not hard requirement)
 * node.js
 
