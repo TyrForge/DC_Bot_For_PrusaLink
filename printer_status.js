@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { safeFetch } from './quickjsonsafethingy.js';
 
 export async function getPrinterStatus(timeoutMs = 5000) {
     const controller = new AbortController();
@@ -17,7 +18,7 @@ export async function getPrinterStatus(timeoutMs = 5000) {
             throw Error(`HTTP ${res.status}`);
         }
 
-        return await res.json();
+        return await safeFetch(res);
 
     } catch (err) {
         if (err.name === "AbortError") {
